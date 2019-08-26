@@ -17,7 +17,7 @@ def check_price():
         # 兩種方式都可以
         # mx_name = soup.find('option',text=re.compile('(?=.*(MX500))(?=.*(500G))',re.I)).text
         mx_name = soup.find('option', text=lambda text: text and all(x in text for x in ['MX500', '500G'])).text
-        mx_name_split = asd[asd.rfind('$') + 1:]
+        mx_name_split = mx_name[mx_name.rfind('$') + 1:]
         mx_price = int(re.match(r'\d+', mx_name_split).group(0))
 
         # 儲存資料
@@ -67,9 +67,9 @@ def exception_notify(error_msg, detail=''):
     requests.post(LineConfig.LINE_NOTIFY_URL, headers=headers, params=params)
 
 
-def exception_notify(error_msg):
+def exception_notify(error_msg, detail=''):
     headers = {"Authorization": "Bearer " + LineConfig.LINE_NOTIFY_TOKEN}
-    params = {"message": error_msg}
+    params = {"message": 'Error ! 運行失敗，原因 : ' + error_msg + '\n詳細原因:\n' + detail}
     requests.post(LineConfig.LINE_NOTIFY_URL, headers=headers, params=params)
 
 
